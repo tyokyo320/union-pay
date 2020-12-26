@@ -6,7 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
+// 声明全局变量
 var (
-	GVA_DB     *gorm.DB
-	GVA_CONFIG *config.Config
+	CONFIG        *config.Config
+	POSTGRESQL_DB *gorm.DB
 )

@@ -2,46 +2,23 @@ package initialize
 
 import (
 	"testing"
-	"time"
+	"union-pay/config"
+	"union-pay/global"
 	"union-pay/models"
 
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreate(t *testing.T) {
-	db := Gorm()
-
-	instances := []models.Rate{
-		{
-			ExchangeRateID:      2413414,
-			CurDate:             time.Unix(1608739200, 0),
-			BaseCurrency:        "CNY",
-			TransactionCurrency: "JPY",
-			ExchangeRate:        0.063361,
-			CreateDate:          time.Unix(1608739200, 0),
-			UpdateDate:          time.Unix(1608739200, 0),
-			EffectiveDate:       time.Unix(1608798082, 0),
-		},
-		{
-			ExchangeRateID:      2411188,
-			CurDate:             time.Unix(1608652800, 0),
-			BaseCurrency:        "CNY",
-			TransactionCurrency: "JPY",
-			ExchangeRate:        0.063515,
-			CreateDate:          time.Unix(1608652800, 0),
-			UpdateDate:          time.Unix(1608652800, 0),
-			EffectiveDate:       time.Unix(1608711868, 0),
-		},
-	}
-
-	// Create
-	result := db.Create(&instances[0])
-
-	require.NoError(t, result.Error)
+func TestDatabaseConnection(t *testing.T) {
+	// 为了测试，必须先读取配置文件
+	global.CONFIG = config.NewConfig("../.")
+	// 然后连接数据库
+	NewGorm(global.CONFIG.PostGreSQL)
 }
 
 func TestRead(t *testing.T) {
-	db := Gorm()
+	global.CONFIG = config.NewConfig("../.")
+	db := NewGorm(global.CONFIG.PostGreSQL)
 
 	rate := models.Rate{}
 	var exchangeRateID uint = 2413414

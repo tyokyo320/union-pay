@@ -17,9 +17,9 @@ type PostGreSQL struct {
 }
 
 // 用于读取配置文件来连接数据库
-func LodeConfig() *Config {
-	// 配置文件路径
-	viper.AddConfigPath(".")
+func NewConfig(path string) *Config {
+	// 配置文件所在路径
+	viper.AddConfigPath(path)
 	// 配置文件名
 	viper.SetConfigName("config")
 	// 配置文件名后缀
@@ -31,7 +31,7 @@ func LodeConfig() *Config {
 		panic(err)
 	}
 
-	// 示例化
+	// 实例化
 	config := Config{}
 
 	// 赋值给config
