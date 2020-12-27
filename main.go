@@ -12,7 +12,7 @@ import (
 var router *gin.Engine
 
 func init() {
-	// 给全局变量赋值（给实例化的变量赋值）
+	// Singleton pattern: 给全局变量赋值（给实例化的变量赋值）
 	// 先读取配置文件
 	global.CONFIG = config.NewConfig(".")
 	// 然后才能初始化连接数据库
