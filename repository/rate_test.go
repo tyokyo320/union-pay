@@ -87,6 +87,9 @@ func TestGroup(t *testing.T) {
 	// 然后连接数据库
 	db := initialize.NewGorm(global.CONFIG.PostGreSQL)
 
+	page := 1
+	pageSize := 10
+
 	subQuery := db.
 		Table("rates").
 		Select("rates.effective_date, MAX(rates.time) as max_time").
@@ -98,6 +101,8 @@ func TestGroup(t *testing.T) {
 			"JOIN (?) as v on u.effective_date = v.effective_date AND u.time = v.max_time",
 			subQuery,
 		).
+		Offset((page - 1) * pageSize).
+		Limit(pageSize).
 		Rows()
 
 	if err != nil {
