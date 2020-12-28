@@ -12,5 +12,6 @@ func InitializeRoutes(router *gin.Engine) {
 	{
 		rateRoutes.POST("/read", handlers.GetRate)
 		rateRoutes.POST("/latest", handlers.GetLatestRate)
+		rateRoutes.POST("/history", handlers.GetHistoryRate)
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"union-pay/global"
 	"union-pay/initialize"
 	"union-pay/routes"
+	"union-pay/tasks"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,6 +26,8 @@ func main() {
 
 	router.LoadHTMLGlob("templates/*")
 	routes.InitializeRoutes(router)
+
+	tasks.RunTasks()
 
 	router.Run(":8080")
 

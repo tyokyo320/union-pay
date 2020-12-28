@@ -20,7 +20,7 @@ func TestRead(t *testing.T) {
 	global.CONFIG = config.NewConfig("../.")
 	db := NewGorm(global.CONFIG.PostGreSQL)
 
-	rate := models.Rate{}
+	rate := models.TempRate{}
 	var exchangeRateID uint = 2413414
 
 	// Read

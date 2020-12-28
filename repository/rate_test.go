@@ -17,7 +17,8 @@ func TestCreate(t *testing.T) {
 	// 然后连接数据库
 	db := initialize.NewGorm(global.CONFIG.PostGreSQL)
 
-	instances := []models.Rate{
+	// 插入数据至TempRate数据库中
+	instances := []models.TempRate{
 		{
 			// ExchangeRateID:      2413414,
 			// CurDate:             time.Unix(1608739200, 0),
@@ -34,11 +35,11 @@ func TestCreate(t *testing.T) {
 			// CurDate:             time.Unix(1608739200, 0),
 			BaseCurrency:        "CNY",
 			TransactionCurrency: "JPY",
-			ExchangeRate:        0.06666,
+			ExchangeRate:        0.063361,
 			// CreateDate:          time.Unix(1608739200, 0),
 			// UpdateDate:          time.Unix(1608739200, 0),
-			EffectiveDate: "2020-12-24",
-			Time:          "14:37",
+			EffectiveDate: "2020-11-19",
+			Time:          "12:45",
 		},
 		// {
 		// 	ExchangeRateID:      2411188,
@@ -50,30 +51,10 @@ func TestCreate(t *testing.T) {
 		// 	UpdateDate:          time.Unix(1608652800, 0),
 		// 	EffectiveDate:       time.Unix(1608711868, 0),
 		// },
-		// {
-		// 	ExchangeRateID:      2408962,
-		// 	CurDate:             time.Unix(1608566400, 0),
-		// 	BaseCurrency:        "CNY",
-		// 	TransactionCurrency: "JPY",
-		// 	ExchangeRate:        0.06363,
-		// 	CreateDate:          time.Unix(1608566400, 0),
-		// 	UpdateDate:          time.Unix(1608566400, 0),
-		// 	EffectiveDate:       time.Unix(1608625456, 0),
-		// },
-		// {
-		// 	ExchangeRateID:      2404510,
-		// 	CurDate:             time.Unix(1608220800, 0),
-		// 	BaseCurrency:        "CNY",
-		// 	TransactionCurrency: "JPY",
-		// 	ExchangeRate:        0.063523,
-		// 	CreateDate:          time.Unix(1608220800, 0),
-		// 	UpdateDate:          time.Unix(1608220800, 0),
-		// 	EffectiveDate:       time.Unix(1608279476, 0),
-		// },
 	}
 
 	// Create
-	result := db.Create(&instances[1])
+	result := db.Create(&instances[0])
 
 	require.NoError(t, result.Error)
 }
@@ -95,7 +76,7 @@ func TestGroup(t *testing.T) {
 		Select("rates.effective_date, MAX(rates.time) as max_time").
 		Group("effective_date")
 
-	rows, err := db.Table("(?) as u", db.Model(&models.Rate{})).
+	rows, err := db.Table("(?) as u", db.Model(&models.TempRate{})).
 		Select("u.effective_date, u.time, u.exchange_rate").
 		Joins(
 			"JOIN (?) as v on u.effective_date = v.effective_date AND u.time = v.max_time",

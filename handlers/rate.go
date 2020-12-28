@@ -10,7 +10,9 @@ import (
 )
 
 type RateRequest struct {
-	Date string `json:"date"`
+	Date     string `json:"date"`
+	Page     int    `json:page`
+	pageSize int    `json:pageSize`
 }
 
 func ShowIndexPage(c *gin.Context) {
@@ -65,16 +67,28 @@ func GetLatestRate(c *gin.Context) {
 
 }
 
+// GetHistoryRate获取最近n天的历史汇率
 func GetHistoryRate(c *gin.Context) {
+	var form RateRequest
+	err := c.ShouldBindJSON(&form)
+	if err != nil {
+		fmt.Println("form err", err)
+	}
+	fmt.Println(form.Page)
+	fmt.Println(form.pageSize)
+
 	var repo *repository.RateRepository = repository.NewRateRepository(global.POSTGRESQL_DB)
+	historyRate, err := repo.ReadList(form.Page, form.pageSize)
 
-	day := 3
-	historyRate := repo.ReadHistory(day)
+	if err != nil {
+		fmt.Println("Unable to get the historical exchange rate that was queried")
+	} else {
+		c.JSON(
+			http.StatusOK,
+			gin.H{
+				"historyRate": historyRate,
+			},
+		)
+	}
 
-	c.JSON(
-		http.StatusOK,
-		gin.H{
-			"historyRate": historyRate,
-		},
-	)
 }

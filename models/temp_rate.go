@@ -4,7 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Rate struct {
+type TempRate struct {
 	gorm.Model
 	// ExchangeRateID      uint      `json:"exchangeRateId"`
 	// CurDate             time.Time `json:"curDate"`

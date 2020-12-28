@@ -3,6 +3,7 @@
     <h2>{{ .title }}</h2>
     <h2 id="rate"></h2>
     <h2 id="lastestRate"></h2>
+    <h2 id="historyRate"></h2>
 </a>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"
@@ -20,6 +21,24 @@
             contentType: 'application/json',
             success: function (result) {
                 $("#lastestRate").html(result.lastestRate.exchangeRate);
+            }
+        });
+
+        $.ajax({
+            url: "/rate/history",
+            method: "POST",
+            data: JSON.stringify({
+                page: 1,
+                pageSize: 10,
+            }),
+            dataType: "json",
+            contentType: 'application/json',
+            success: function (result) {
+                result.historyRate.forEach(e => {
+                    $("#historyRate").append(
+                        `<p>${e.exchangeRate}</p>`
+                    );
+                });
             }
         });
     });
