@@ -16,12 +16,12 @@ type RateHistory struct {
 
 // 定义接口
 type IRepository interface {
-	CreateTempRate(date, time string, rate float64) error
+	Create(date, time string, rate float64) error
 	Read(date string) *models.TempRate
 	ReadLastest() *models.TempRate
 	ReadList(page, pageSize int) ([]RateHistory, error)
-	Update(date string, newdata float64)
-	Delete(id uint)
+	// Update(date string, newdata float64)
+	// Delete(id uint)
 }
 
 // 定义结构体
@@ -38,7 +38,7 @@ func NewRateRepository(db *gorm.DB) *RateRepository {
 
 // 实现接口方法
 // 向TempRate数据库添加数据
-func (r *RateRepository) CreateTempRate(date, time string, rate float64) error {
+func (r *RateRepository) Create(date, time string, rate float64) error {
 	add := []models.TempRate{
 		{
 			BaseCurrency:        "CNY",
@@ -68,16 +68,16 @@ func (r *RateRepository) Read(date string) *models.TempRate {
 	return &rate
 }
 
-func (r *RateRepository) Update(date string, newdata float64) {
-	updateRate := models.UpdateRate{}
+// func (r *RateRepository) Update(date string, newdata float64) {
+// 	updateRate := models.UpdateRate{}
 
-	r.db.Model(&updateRate).Where("effective_date = ?", date).Update("exchange_rate", newdata)
-}
+// 	r.db.Model(&updateRate).Where("effective_date = ?", date).Update("exchange_rate", newdata)
+// }
 
-func (r *RateRepository) Delete(id uint) {
-	rate := models.TempRate{}
-	r.db.Delete(&rate, id)
-}
+// func (r *RateRepository) Delete(id uint) {
+// 	rate := models.TempRate{}
+// 	r.db.Delete(&rate, id)
+// }
 
 // 从数据库读取最近一天的汇率
 func (r *RateRepository) ReadLastest() *models.TempRate {
@@ -97,7 +97,7 @@ func (r *RateRepository) ReadList(page, pageSize int) ([]RateHistory, error) {
 	}
 
 	subQuery := r.db.
-		Table("rates").
+		Table("temp_rates").
 		Select("rates.effective_date, MAX(rates.time) as max_time").
 		Group("effective_date")
 

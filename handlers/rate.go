@@ -15,6 +15,7 @@ type RateRequest struct {
 	pageSize int    `json:pageSize`
 }
 
+// ShowIndexPage: 用于展示主页
 func ShowIndexPage(c *gin.Context) {
 	c.HTML(
 		http.StatusOK,
@@ -25,8 +26,8 @@ func ShowIndexPage(c *gin.Context) {
 	)
 }
 
+// GetRate: 获取具体某一天的汇率
 // handlers -> repository
-// 获取具体某一天的汇率
 func GetRate(c *gin.Context) {
 	var form RateRequest
 	err := c.ShouldBindJSON(&form)

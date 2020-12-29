@@ -6,8 +6,8 @@ import (
 
 type UpdateRate struct {
 	gorm.Model
-	BaseCurrency        string  `json:"baseCurrency"`
-	TransactionCurrency string  `json:"transactionCurrency"`
+	BaseCurrency        string  `json:"baseCurrency" gorm:"uniqueIndex:idx_name"`
+	TransactionCurrency string  `json:"transactionCurrency" gorm:"uniqueIndex:idx_name"`
 	ExchangeRate        float64 `json:"exchangeRate"`
-	EffectiveDate       string  `json:"effectiveDate"`
+	EffectiveDate       string  `json:"effectiveDate" gorm:"uniqueIndex:idx_name"`
 }

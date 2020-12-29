@@ -10,8 +10,39 @@
 8. routes
 9. 模版html的修改，jquery ajax
 10. 定时任务(jobrunner)
-11. 缓存
-12. 历史数据获取
+11. 历史数据获取
+12. 缓存
 13. CI/CD
 14. 前端设计
-15. 
+
+## 文件构造
+
+1. config文件夹：读取配置文件
+2. global文件夹：声明全局变量
+3. handlers文件夹：定义handler
+4. initialize文件夹：用配置文件连接数据库，以及创建tables
+5. models文件夹：定义各种tables
+6. repository文件夹：每个table所需要的功能(eg.数据库的CRUD)
+7. routes文件夹：定义route
+8. tasks文件夹：定义各种定时任务
+9. templates文件夹：放置html文件
+10. utils文件夹：爬取汇率的文件
+
+- - -
+
+
+
+
+
+
+
+
+
+
+
+```mermaid
+graph BT
+    config --> database
+    database --> repository
+    repository --> handler
+```

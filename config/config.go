@@ -2,10 +2,12 @@ package config
 
 import "github.com/spf13/viper"
 
+// 用于保存各种数据库
 type Config struct {
 	PostGreSQL PostGreSQL `mapstructure:"postgresql"`
 }
 
+// Postgresql
 type PostGreSQL struct {
 	Host     string `mapstructure:"host"`
 	Post     string `mapstructure:"port"`
