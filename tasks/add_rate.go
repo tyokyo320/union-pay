@@ -20,8 +20,8 @@ func (e AddRate) Run() {
 	// date := "2020-12-28"
 	// time := "19:05:12"
 	currentTime := time.Now()
-	date := currentTime.Format("2020-12-28")
-	time := currentTime.Format("19:05:12")
+	date := currentTime.Format("2006-01-02")
+	time := currentTime.Format("15:04:05")
 	// fmt.Println("Current Time in String: ", currentTime.String())
 	rate, err := utils.GetRate(date, "CNY", "JPY")
 
@@ -32,7 +32,7 @@ func (e AddRate) Run() {
 
 	fmt.Println(rate)
 	if rate == 0 {
-		fmt.Println("当日汇率查询显示待更新")
+		fmt.Println("当日汇率查询显示待更新!")
 		return
 	}
 
@@ -44,13 +44,16 @@ func (e AddRate) Run() {
 		return
 	}
 
-	// 检查update数据库中是否有数据，有则更新，没有插入
+	// 检查update数据库中是否有数据，有则更新DB，没有插入
 	var newRepo *repository.UpdateRateRepository = repository.NewUpdateRateRepository(global.POSTGRESQL_DB)
 	if isex, _ := newRepo.IsExist(date); isex {
 		newRepo.Update(date, rate)
 	} else {
 		newRepo.Create(date, rate)
 	}
+	// 并添加至缓存中
+	var redisRepo *repository.RateCacheRepository = repository.NewRateCacheRepository(global.REDIS)
+	redisRepo.Create("latest", rate)
 
 	// Sends some email
 	// fmt.Printf("Every 10 sec send reminder emails \n")

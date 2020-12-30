@@ -3,6 +3,7 @@ package global
 import (
 	"union-pay/config"
 
+	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 )
 
@@ -10,4 +11,5 @@ import (
 var (
 	CONFIG        *config.Config
 	POSTGRESQL_DB *gorm.DB
+	REDIS         *redis.Client
 )

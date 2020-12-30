@@ -11,8 +11,8 @@ import (
 
 type RateRequest struct {
 	Date     string `json:"date"`
-	Page     int    `json:page`
-	pageSize int    `json:pageSize`
+	Page     int    `json:"page" binding:"gte=1"`
+	PageSize int    `json:"pageSize" binding:"gte=1,lte=50"`
 }
 
 // ShowIndexPage: 用于展示主页
@@ -36,33 +36,50 @@ func GetRate(c *gin.Context) {
 	}
 	fmt.Println(form.Date)
 
-	var repo *repository.RateRepository = repository.NewRateRepository(global.POSTGRESQL_DB)
-	rate := repo.Read(form.Date)
+	var newRepo *repository.UpdateRateRepository = repository.NewUpdateRateRepository(global.POSTGRESQL_DB)
+	var redisRepo *repository.RateCacheRepository = repository.NewRateCacheRepository(global.REDIS)
 
-	if rate == nil {
-		fmt.Println("Current exchange rate query display to be updated")
-	} else {
-		// c.JSON(http.StatusOK, rate)
+	// 先从缓存中读取某一天汇率
+	rate, err := redisRepo.Read(form.Date)
+	if err != nil {
+		// 如果缓存中没有，从Update DB中更新
+		rate := newRepo.Read(form.Date)
+		// 然后添加至缓存中
+		redisRepo.Create(form.Date, rate.ExchangeRate)
 
 		c.JSON(
 			http.StatusOK,
 			gin.H{
-				"rate": rate,
+				"rate": rate.ExchangeRate,
 			},
 		)
+		return
 	}
-
-}
-
-// GetLatestRate获取最近一天的汇率
-func GetLatestRate(c *gin.Context) {
-	var repo *repository.RateRepository = repository.NewRateRepository(global.POSTGRESQL_DB)
-	lastestRate := repo.ReadLastest()
 
 	c.JSON(
 		http.StatusOK,
 		gin.H{
-			"lastestRate": lastestRate,
+			"rate": rate,
+		},
+	)
+}
+
+// GetLatestRate获取最近一天的汇率
+func GetLatestRate(c *gin.Context) {
+	var newRepo *repository.UpdateRateRepository = repository.NewUpdateRateRepository(global.POSTGRESQL_DB)
+	var redisRepo *repository.RateCacheRepository = repository.NewRateCacheRepository(global.REDIS)
+
+	rate, err := redisRepo.Read("latest")
+	if err != nil {
+		lastestRate := newRepo.ReadLastest()
+		redisRepo.Create("latest", lastestRate.ExchangeRate)
+		rate = lastestRate.ExchangeRate
+	}
+
+	c.JSON(
+		http.StatusOK,
+		gin.H{
+			"lastestRate": rate,
 		},
 	)
 
@@ -71,15 +88,23 @@ func GetLatestRate(c *gin.Context) {
 // GetHistoryRate获取最近n天的历史汇率
 func GetHistoryRate(c *gin.Context) {
 	var form RateRequest
-	err := c.ShouldBindJSON(&form)
+	err := c.BindJSON(&form)
 	if err != nil {
 		fmt.Println("form err", err)
+		c.JSON(
+			http.StatusOK,
+			gin.H{
+				"error": "invalid params",
+			},
+		)
+		return
 	}
-	fmt.Println(form.Page)
-	fmt.Println(form.pageSize)
 
-	var repo *repository.RateRepository = repository.NewRateRepository(global.POSTGRESQL_DB)
-	historyRate, err := repo.ReadList(form.Page, form.pageSize)
+	fmt.Println(form.Page)
+	fmt.Println(form.PageSize)
+
+	var newRepo *repository.UpdateRateRepository = repository.NewUpdateRateRepository(global.POSTGRESQL_DB)
+	historyRate, err := newRepo.ReadList(form.Page, form.PageSize)
 
 	if err != nil {
 		fmt.Println("Unable to get the historical exchange rate that was queried")

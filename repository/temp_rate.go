@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type RateHistory struct {
+type TempDBRateHistory struct {
 	Date         string  `json:"date"`
 	Time         string  `json:"time"`
 	ExchangeRate float64 `json:"exchangeRate"`
@@ -19,7 +19,7 @@ type IRepository interface {
 	Create(date, time string, rate float64) error
 	Read(date string) *models.TempRate
 	ReadLastest() *models.TempRate
-	ReadList(page, pageSize int) ([]RateHistory, error)
+	ReadList(page, pageSize int) ([]TempDBRateHistory, error)
 	// Update(date string, newdata float64)
 	// Delete(id uint)
 }
@@ -91,11 +91,7 @@ func (r *RateRepository) ReadLastest() *models.TempRate {
 }
 
 // 从数据库获取近n天的历史汇率
-func (r *RateRepository) ReadList(page, pageSize int) ([]RateHistory, error) {
-	if page < 1 {
-		return nil, errors.New("page < 1")
-	}
-
+func (r *RateRepository) ReadList(page, pageSize int) ([]TempDBRateHistory, error) {
 	subQuery := r.db.
 		Table("temp_rates").
 		Select("rates.effective_date, MAX(rates.time) as max_time").
@@ -112,13 +108,13 @@ func (r *RateRepository) ReadList(page, pageSize int) ([]RateHistory, error) {
 		Rows()
 
 	if err != nil {
-		return nil, errors.New("query error")
+		return nil, errors.New("query temp DB history rate error")
 	}
 
-	history := []RateHistory{}
+	history := []TempDBRateHistory{}
 
 	for rows.Next() {
-		h := RateHistory{}
+		h := TempDBRateHistory{}
 		rows.Scan(&h.Date, &h.Time, &h.ExchangeRate)
 		fmt.Println(h.Date, h.Time, h.ExchangeRate)
 		history = append(history, h)

@@ -1,3 +1,4 @@
+// 运行整个项目
 package main
 
 import (
@@ -18,6 +19,8 @@ func init() {
 	global.CONFIG = config.NewConfig(".")
 	// 然后才能初始化连接数据库
 	global.POSTGRESQL_DB = initialize.NewGorm(global.CONFIG.PostGreSQL)
+	// Redis
+	global.REDIS = initialize.NewRedis(global.CONFIG.Redis)
 }
 
 func main() {

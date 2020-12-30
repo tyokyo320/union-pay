@@ -32,8 +32,10 @@ func NewGorm(c config.PostGreSQL) *gorm.DB {
 	}
 
 	// Migrate the schema
-	db.AutoMigrate(&models.TempRate{})
-	db.AutoMigrate(&models.UpdateRate{})
+	db.AutoMigrate(
+		&models.TempRate{},
+		&models.UpdateRate{},
+	)
 
 	return db
 }

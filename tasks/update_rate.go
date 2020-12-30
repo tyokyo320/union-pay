@@ -19,7 +19,7 @@ func (e UpdateRate) Run() {
 	// get lastest rate
 	// date := "2020-12-28"
 	currentTime := time.Now()
-	date := currentTime.Format("2020-12-28")
+	date := currentTime.Format("2006-01-02")
 	rate, err := utils.GetRate(date, "CNY", "JPY")
 
 	if err != nil {
@@ -40,6 +40,8 @@ func (e UpdateRate) Run() {
 	} else {
 		newRepo.Create(date, rate)
 	}
+	// 并添加至缓存中
+	var redisRepo *repository.RateCacheRepository = repository.NewRateCacheRepository(global.REDIS)
+	redisRepo.Create("latest", rate)
 	fmt.Println("------")
-
 }

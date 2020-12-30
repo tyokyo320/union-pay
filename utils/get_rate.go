@@ -12,16 +12,16 @@ import (
 
 // 用于爬取
 type Result struct {
-	ExchangeRateId            int
-	CurDate                   int
-	BaseCurrency              string
-	TransactionCurrency       string
-	ExchangeRate              float64
-	CreateDate                int
-	CreateUser                int
-	UpdateDate                int
-	UpdateUser                int
-	EffectiveDate             int
+	ExchangeRateID            int     `json:"exchangeRateId"`
+	CurDate                   int     `json:"curDate"`
+	BaseCurrency              string  `json:"baseCurrency"`
+	TransactionCurrency       string  `json:"transactionCurrency"`
+	ExchangeRate              float64 `json:"exchangeRate"`
+	CreateDate                int     `json:"createDate"`
+	CreateUser                int     `json:"createUser"`
+	UpdateDate                int     `json:"updateDate"`
+	UpdateUser                int     `json:"updateUser"`
+	EffectiveDate             int     `json:"effectiveDate"`
 	TransactionCurrencyOption interface{}
 }
 
@@ -42,6 +42,12 @@ func GetRate(date, baseCurrency, transactionCurrency string) (float64, error) {
 	}
 
 	// 自定义Header
+	request.Header.Set("origin", "https://m.unionpayintl.com")
+	request.Header.Set("referer", "https://m.unionpayintl.com/cardholderServ/wap/rate?language=cn")
+	request.Header.Set("sec-fetch-dest", "empty")
+	request.Header.Set("sec-fetch-mode", "cors")
+	request.Header.Set("x-requested-with", "XMLHttpRequest")
+	request.Header.Set("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
 	request.Header.Set("content-type", "application/x-www-form-urlencoded; charset=UTF-8")
 
 	response, err := client.Do(request)

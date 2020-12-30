@@ -10,7 +10,7 @@
 8. routes
 9. 模版html的修改，jquery ajax
 10. 定时任务(jobrunner)
-11. 历史数据获取
+11. 历史数据获取(先连接update DB，爬取并储存历史数据)
 12. 缓存
 13. CI/CD
 14. 前端设计
@@ -26,12 +26,16 @@
 7. routes文件夹：定义route
 8. tasks文件夹：定义各种定时任务
 9. templates文件夹：放置html文件
-10. utils文件夹：爬取汇率的文件
+10. utils文件夹：爬取汇率的文件，爬取历史数据文件
 
 - - -
 
 
+## docker
 
+- postgresql
+- redis
+- my(golang)
 
 
 
@@ -46,3 +50,5 @@ graph BT
     database --> repository
     repository --> handler
 ```
+
+rest api
