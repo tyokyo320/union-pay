@@ -103,6 +103,8 @@ func GetHistoryRate(c *gin.Context) {
 	fmt.Println(form.Page)
 	fmt.Println(form.PageSize)
 
+	// cache list
+
 	var newRepo *repository.UpdateRateRepository = repository.NewUpdateRateRepository(global.POSTGRESQL_DB)
 	historyRate, err := newRepo.ReadList(form.Page, form.PageSize)
 

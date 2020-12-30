@@ -44,10 +44,12 @@ func (e AddRate) Run() {
 		return
 	}
 
-	// 检查update数据库中是否有数据，有则更新DB，没有插入
+	// 检查update数据库中是否有数据，有更新则更新DB，没有插入
 	var newRepo *repository.UpdateRateRepository = repository.NewUpdateRateRepository(global.POSTGRESQL_DB)
-	if isex, _ := newRepo.IsExist(date); isex {
-		newRepo.Update(date, rate)
+	if change := newRepo.Read(date); change != nil {
+		if change.ExchangeRate != rate {
+			newRepo.Update(date, rate)
+		}
 	} else {
 		newRepo.Create(date, rate)
 	}

@@ -2,7 +2,6 @@ package repository
 
 import (
 	"errors"
-	"fmt"
 	"union-pay/models"
 
 	"gorm.io/gorm"
@@ -15,7 +14,7 @@ type IUpdateRepository interface {
 	ReadLastest() *models.TempRate
 	ReadList(page, pageSize int) ([]models.UpdateRate, error)
 	Update(date string, rate float64)
-	IsExist(date string) (bool, error)
+	// IsExist(date string) (bool, error)
 }
 
 // 定义结构体
@@ -88,18 +87,18 @@ func (r *UpdateRateRepository) ReadList(page, pageSize int) ([]models.UpdateRate
 }
 
 // 判断当天数据是否存在
-func (r *UpdateRateRepository) IsExist(date string) (bool, error) {
-	updateRate := models.UpdateRate{}
-	if err := r.db.Where("effective_date = ?", date).Order("effective_date DESC").First(&updateRate).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			fmt.Println("Error! Record Not Found")
-			return false, nil
-		}
-		return false, err
-	}
+// func (r *UpdateRateRepository) IsExist(date string) (bool, error) {
+// 	updateRate := models.UpdateRate{}
+// 	if err := r.db.Where("effective_date = ?", date).Order("effective_date DESC").First(&updateRate).Error; err != nil {
+// 		if err == gorm.ErrRecordNotFound {
+// 			fmt.Println("Error! Record Not Found")
+// 			return false, nil
+// 		}
+// 		return false, err
+// 	}
 
-	return true, nil
-}
+// 	return true, nil
+// }
 
 // 用于更新update DB数据库当日汇率
 func (r *UpdateRateRepository) Update(date string, rate float64) {

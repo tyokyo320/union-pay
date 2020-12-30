@@ -35,11 +35,19 @@ func (e UpdateRate) Run() {
 
 	// update DB中先创建当天数据，并不断更新有变化的数据
 	var newRepo *repository.UpdateRateRepository = repository.NewUpdateRateRepository(global.POSTGRESQL_DB)
-	if isex, _ := newRepo.IsExist(date); isex {
-		newRepo.Update(date, rate)
+	if change := newRepo.Read(date); change != nil {
+		if change.ExchangeRate != rate {
+			newRepo.Update(date, rate)
+		}
 	} else {
 		newRepo.Create(date, rate)
 	}
+	// if isex, _ := newRepo.IsExist(date); isex {
+	// 	newRepo.Update(date, rate)
+	// } else {
+	// 	newRepo.Create(date, rate)
+	// }
+
 	// 并添加至缓存中
 	var redisRepo *repository.RateCacheRepository = repository.NewRateCacheRepository(global.REDIS)
 	redisRepo.Create("latest", rate)
