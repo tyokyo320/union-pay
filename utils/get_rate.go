@@ -11,7 +11,7 @@ import (
 )
 
 // 用于爬取
-type Result struct {
+type result struct {
 	ExchangeRateID            int     `json:"exchangeRateId"`
 	CurDate                   int     `json:"curDate"`
 	BaseCurrency              string  `json:"baseCurrency"`
@@ -67,7 +67,7 @@ func GetRate(date, baseCurrency, transactionCurrency string) (float64, error) {
 	// fmt.Println(string(body))
 
 	// convert JSON to struct
-	res := Result{}
+	res := result{}
 	json.Unmarshal(body, &res)
 	// fmt.Println(res)
 	// fmt.Println(res.ExchangeRate)

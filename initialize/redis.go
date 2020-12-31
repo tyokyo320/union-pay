@@ -6,6 +6,7 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
+// NewRedis connection
 func NewRedis(c config.Redis) *redis.Client {
 	client := redis.NewClient(&redis.Options{
 		Addr:     c.Addr,

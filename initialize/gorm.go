@@ -9,8 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// 依赖注入，连接数据库db依赖配置文件信息config
-// (db -> config)
+// NewGorm 依赖注入，连接数据库db依赖配置文件信息config
 func NewGorm(c config.PostGreSQL) *gorm.DB {
 	// 连接数据库
 	// m := global.GVA_CONFIG
@@ -28,7 +27,7 @@ func NewGorm(c config.PostGreSQL) *gorm.DB {
 	// fmt.Println(dsn)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("connection failure")
+		panic("DB connection failure")
 	}
 
 	// Migrate the schema

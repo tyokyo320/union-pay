@@ -1,4 +1,4 @@
-package routes
+package routers
 
 import (
 	"union-pay/handlers"
@@ -6,8 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitializeRoutes(router *gin.Engine) {
-	router.GET("/", handlers.ShowIndexPage)
+func InitializeRateRouters(router *gin.Engine) {
 	rateRoutes := router.Group("/rate")
 	{
 		rateRoutes.POST("/read", handlers.GetRate)

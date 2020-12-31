@@ -17,12 +17,9 @@ type AddRate struct {
 // ReminderEmails.Run() will get triggered automatically.
 func (e AddRate) Run() {
 	// get lastest rate
-	// date := "2020-12-28"
-	// time := "19:05:12"
 	currentTime := time.Now()
 	date := currentTime.Format("2006-01-02")
 	time := currentTime.Format("15:04:05")
-	// fmt.Println("Current Time in String: ", currentTime.String())
 	rate, err := utils.GetRate(date, "CNY", "JPY")
 
 	if err != nil {
@@ -36,7 +33,7 @@ func (e AddRate) Run() {
 		return
 	}
 
-	// 在temp rate DB中一直添加最新爬取的数据
+	// 在temp_rate DB中一直添加最新爬取的数据
 	var repo *repository.RateRepository = repository.NewRateRepository(global.POSTGRESQL_DB)
 	err = repo.Create(date, time, rate)
 	if err != nil {
