@@ -28,6 +28,7 @@ func GetRate(c *gin.Context) {
 	err := c.ShouldBindJSON(&form)
 	if err != nil {
 		fmt.Println("form err", err)
+		global.ErrorLogger.Println("[handlers]Form(GetRate) went wrong")
 	}
 	fmt.Println(form.Date)
 
@@ -79,6 +80,7 @@ func GetHistoryRate(c *gin.Context) {
 	err := c.BindJSON(&form)
 	if err != nil {
 		fmt.Println("form err", err)
+		global.ErrorLogger.Println("[handlers]Form(GetHistoryRate) went wrong")
 		c.JSON(
 			http.StatusOK,
 			gin.H{
@@ -97,7 +99,8 @@ func GetHistoryRate(c *gin.Context) {
 	historyRate, err := newRepo.ReadList(form.Page, form.PageSize)
 
 	if err != nil {
-		fmt.Println("Unable to get the historical exchange rate that was queried")
+		fmt.Println("Unable to get the historical exchange rates that was queried")
+		global.ErrorLogger.Println("Get the historical exchange rates went wrong")
 	} else {
 		c.JSON(
 			http.StatusOK,

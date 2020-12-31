@@ -23,12 +23,15 @@ func (e UpdateRate) Run() {
 	rate, err := utils.GetRate(date, "CNY", "JPY")
 
 	if err != nil {
+		global.ErrorLogger.Println("[tasks update]Get rate went wrong")
 		fmt.Println(err.Error())
 		return
 	}
 
 	fmt.Println(rate)
+
 	if rate == 0 {
+		global.InfoLogger.Println("[tasks update]当日汇率查询显示待更新")
 		fmt.Println("当日汇率查询显示待更新")
 		return
 	}

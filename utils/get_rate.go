@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"union-pay/global"
 )
 
 // 用于爬取
@@ -37,6 +38,7 @@ func GetRate(date, baseCurrency, transactionCurrency string) (float64, error) {
 
 	request, err := http.NewRequest("POST", "https://m.unionpayintl.com/cardholderServ/wap/rate/search", bytes.NewBufferString(data.Encode()))
 	if err != nil {
+		global.ErrorLogger.Println("[utils]Http post went wrong")
 		fmt.Println("http post error", err)
 		return 0.0, errors.New("http post error")
 	}
@@ -52,6 +54,7 @@ func GetRate(date, baseCurrency, transactionCurrency string) (float64, error) {
 
 	response, err := client.Do(request)
 	if err != nil {
+		global.ErrorLogger.Println("[utils]Http response went wrong")
 		fmt.Println("response error", err)
 		return 0.0, errors.New("response error")
 	}
@@ -61,6 +64,7 @@ func GetRate(date, baseCurrency, transactionCurrency string) (float64, error) {
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
+		global.ErrorLogger.Println("[utils]Http read body went wrong")
 		fmt.Println("read error", err)
 		return 0.0, errors.New("read error")
 	}

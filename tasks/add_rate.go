@@ -23,12 +23,15 @@ func (e AddRate) Run() {
 	rate, err := utils.GetRate(date, "CNY", "JPY")
 
 	if err != nil {
+		global.ErrorLogger.Println("[tasks add]Get rate went wrong...")
 		fmt.Println(err.Error())
 		return
 	}
 
 	fmt.Println(rate)
+
 	if rate == 0 {
+		global.InfoLogger.Println("[tasks add]当日汇率查询显示待更新...")
 		fmt.Println("当日汇率查询显示待更新!")
 		return
 	}
@@ -37,6 +40,7 @@ func (e AddRate) Run() {
 	var repo *repository.RateRepository = repository.NewRateRepository(global.POSTGRESQL_DB)
 	err = repo.Create(date, time, rate)
 	if err != nil {
+		global.ErrorLogger.Println("[tasks add]Create temp_rate DB went wrong")
 		fmt.Println("temp rate添加数据失败")
 		return
 	}

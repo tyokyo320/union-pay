@@ -3,6 +3,7 @@ package initialize
 import (
 	"fmt"
 	"union-pay/config"
+	"union-pay/global"
 	"union-pay/models"
 
 	"gorm.io/driver/postgres"
@@ -27,6 +28,7 @@ func NewGorm(c config.PostGreSQL) *gorm.DB {
 	// fmt.Println(dsn)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
+		global.PanicLogger.Println("[initialize]DB connection went wrong")
 		panic("DB connection failure")
 	}
 

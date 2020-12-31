@@ -2,6 +2,8 @@
 package main
 
 import (
+	"log"
+	"os"
 	"union-pay/config"
 	"union-pay/global"
 	"union-pay/initialize"
@@ -11,7 +13,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var router *gin.Engine
+var (
+	router *gin.Engine
+)
 
 func init() {
 	// Singleton pattern: 给全局变量赋值（给实例化的变量赋值）
@@ -21,6 +25,16 @@ func init() {
 	global.POSTGRESQL_DB = initialize.NewGorm(global.CONFIG.PostGreSQL)
 	// Redis
 	global.REDIS = initialize.NewRedis(global.CONFIG.Redis)
+	// Logger
+	file, err := os.OpenFile("./logs/logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	global.InfoLogger = log.New(file, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+	global.WarningLogger = log.New(file, "WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
+	global.ErrorLogger = log.New(file, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
+	global.PanicLogger = log.New(file, "PANIC: ", log.Ldate|log.Ltime|log.Lshortfile)
 }
 
 func main() {
@@ -34,6 +48,7 @@ func main() {
 
 	tasks.RunTasks()
 
+	global.InfoLogger.Println("Starting the application...")
 	router.Run(":8080")
 
 }

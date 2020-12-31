@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"union-pay/global"
 	"union-pay/models"
 
 	"gorm.io/gorm"
@@ -41,6 +42,7 @@ func (r *UpdateRateRepository) Create(date string, rate float64) error {
 	result := r.db.Create(&add)
 
 	if result.Error != nil {
+		global.ErrorLogger.Println("Create update_rate DB went wrong")
 		return errors.New("update_rate DB create error")
 	}
 

@@ -38,7 +38,8 @@ func main() {
 		// fmt.Println(date.Format("2006-01-02"))
 		rate, err := utils.GetRate(date.Format("2006-01-02"), "CNY", "JPY")
 		if err != nil {
-			fmt.Println("get history rate error!")
+			fmt.Println("[crawler]get history rate error!")
+			global.ErrorLogger.Println("Get history rate went wrong")
 			return
 		}
 
