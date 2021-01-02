@@ -22,8 +22,8 @@ func init() {
 
 func main() {
 	// set end of days
-	start := time.Date(2020, 12, 1, 0, 0, 0, 0, time.UTC)
-	end := time.Date(2020, 12, 20, 0, 0, 0, 0, time.UTC)
+	start := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
+	end := time.Date(2021, 1, 2, 0, 0, 0, 0, time.UTC)
 	fmt.Println(start.Format("2006-01-02"), "-", end.Format("2006-01-02"))
 
 	lastRate := 0.0
