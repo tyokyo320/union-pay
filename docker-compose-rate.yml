@@ -1,0 +1,50 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: rate-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/docker/rate/postgresql/data:/var/lib/postgresql/data
+    networks:
+      - default
+      - nginx-proxy
+
+  redis:
+    image: redis:latest
+    container_name: rate-redis
+    hostname: redis
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - default
+      - nginx-proxy
+    volumes:
+      - ~/docker/rate/redis/data:/data
+      - ~/docker/rate/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ~/docker/rate/redis/logs:/logs
+
+  rate:
+    build: ~/docker/rate/
+    container_name: rate
+    environment:
+      - TZ=Asia/Tokyo
+      - VIRTUAL_HOST=https://rate.tyokyo320.com/
+    volumes:
+      - ~/docker/rate/:/rate
+    restart: unless-stopped
+    networks:
+      - default
+      - nginx-proxy
+
+networks:
+  nginx-proxy:
+    external:
+      name: nginx-proxy

@@ -6,6 +6,6 @@ import "github.com/bamzi/jobrunner"
 func RunTasks() {
 	// optional: jobrunner.Start(pool int, concurrent int) (10, 1)
 	jobrunner.Start()
-	jobrunner.Schedule("@every 20s", AddRate{})
-	jobrunner.Schedule("@every 60s", UpdateRate{})
+	jobrunner.Schedule("@every 1h", AddRate{})
+	jobrunner.Schedule("@every 24h", UpdateRate{})
 }
