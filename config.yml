@@ -1,6 +1,6 @@
 # postgresql connect configuration
 postgresql:
-  host: "192.168.50.185"
+  host: "postgres"
   port: "5432"
   user: "test"
   password: "test"
@@ -10,6 +10,6 @@ postgresql:
 
 # redis configuration
 redis:
-  addr: "192.168.50.185:6379"
+  addr: "redis:6379"
   password: ""
   db: 0
