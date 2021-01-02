@@ -36,7 +36,7 @@ services:
     container_name: rate
     environment:
       - TZ=Asia/Tokyo
-      - VIRTUAL_HOST=https://rate.tyokyo320.com/
+      - VIRTUAL_HOST=rate.tyokyo320.com
     volumes:
       - ~/docker/union-pay/:/union-pay
     restart: unless-stopped
