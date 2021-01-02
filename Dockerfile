@@ -16,6 +16,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -installsuffix cgo -o app cmd/server/main.
 FROM alpine:latest  
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
+COPY --from=builder /union-pay/templates .
 COPY --from=builder /union-pay/app .
 EXPOSE 8080
 CMD ["./app"]  
