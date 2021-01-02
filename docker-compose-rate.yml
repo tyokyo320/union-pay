@@ -38,7 +38,7 @@ services:
       - TZ=Asia/Tokyo
       - VIRTUAL_HOST=rate.tyokyo320.com
     volumes:
-      - ~/docker/union-pay/:/union-pay
+      - ~/docker/union-pay/config.yml:/root/config.yml
     restart: unless-stopped
     networks:
       - default
