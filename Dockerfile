@@ -10,7 +10,7 @@ WORKDIR /union-pay
 # Copy all files
 COPY . .
 RUN go mod download
-RUN CGO_ENABLED=0 GOOS=linux go build -installsuffix cgo cmd/server/main.go -o app .
+RUN CGO_ENABLED=0 GOOS=linux go build -installsuffix cgo -o app cmd/server/main.go
 
 # RUN
 FROM alpine:latest  
