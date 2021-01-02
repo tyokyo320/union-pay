@@ -42,6 +42,9 @@ services:
       - ~/docker/union-pay/config.yml:/root/config.yml
       - ~/docker/union-pay/logs:/root/logs
     restart: unless-stopped
+    depends_on:
+      - redis
+      - postgres
     networks:
       - default
       - nginx-proxy
