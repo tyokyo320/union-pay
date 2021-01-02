@@ -26,6 +26,9 @@ func init() {
 	// Redis
 	global.REDIS = initialize.NewRedis(global.CONFIG.Redis)
 	// Logger
+	if _, err := os.Stat("./logs"); os.IsNotExist(err) {
+		os.Mkdir("./logs", 0700)
+	}
 	file, err := os.OpenFile("./logs/logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		log.Fatal(err)

@@ -39,6 +39,7 @@ services:
       - VIRTUAL_HOST=rate.tyokyo320.com
     volumes:
       - ~/docker/union-pay/config.yml:/root/config.yml
+      - ~/docker/union-pay/logs:/root/logs
     restart: unless-stopped
     networks:
       - default
