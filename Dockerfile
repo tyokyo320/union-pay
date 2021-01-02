@@ -5,7 +5,7 @@ FROM golang:alpine AS builder
 LABEL maintainer="tyokyo320 <contact@tyokyo320.com>"
 
 # Set the Current Working Directory inside the container
-WORKDIR /rate
+WORKDIR /union-pay
 
 # Copy go mod and sum files
 COPY app.go .
@@ -16,7 +16,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -installsuffix cgo cmd/server/main.go -o a
 FROM alpine:latest  
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
-COPY --from=builder /rate/app .
+COPY --from=builder /union-pay/app .
 EXPOSE 8080
 CMD ["./app"]  
 

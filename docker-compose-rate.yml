@@ -11,7 +11,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ~/docker/rate/postgresql/data:/var/lib/postgresql/data
+      - ~/docker/union-pay/postgresql/data:/var/lib/postgresql/data
     networks:
       - default
       - nginx-proxy
@@ -27,18 +27,18 @@ services:
       - default
       - nginx-proxy
     volumes:
-      - ~/docker/rate/redis/data:/data
-      - ~/docker/rate/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
-      - ~/docker/rate/redis/logs:/logs
+      - ~/docker/union-pay/redis/data:/data
+      - ~/docker/union-pay/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ~/docker/union-pay/redis/logs:/logs
 
   rate:
-    build: ~/docker/rate/
+    build: ~/docker/union-pay/
     container_name: rate
     environment:
       - TZ=Asia/Tokyo
       - VIRTUAL_HOST=https://rate.tyokyo320.com/
     volumes:
-      - ~/docker/rate/:/rate
+      - ~/docker/union-pay/:/union-pay
     restart: unless-stopped
     networks:
       - default
