@@ -37,6 +37,7 @@ services:
     environment:
       - TZ=Asia/Tokyo
       - VIRTUAL_HOST=rate.tyokyo320.com
+      - GIN_MODE=release
     volumes:
       - ~/docker/union-pay/config.yml:/root/config.yml
       - ~/docker/union-pay/logs:/root/logs
