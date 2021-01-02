@@ -7,8 +7,8 @@ LABEL maintainer="tyokyo320 <contact@tyokyo320.com>"
 # Set the Current Working Directory inside the container
 WORKDIR /union-pay
 
-# Copy go mod and sum files
-COPY app.go .
+# Copy all files
+COPY . .
 RUN go mod download
 RUN CGO_ENABLED=0 GOOS=linux go build -installsuffix cgo cmd/server/main.go -o app .
 
