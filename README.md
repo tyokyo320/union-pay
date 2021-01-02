@@ -39,12 +39,6 @@
 - my(golang)
 
 
-
-
-
-
-
-
 ```mermaid
 graph BT
     config --> database
