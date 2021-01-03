@@ -45,6 +45,7 @@ func main() {
 	router = gin.Default()
 
 	router.LoadHTMLGlob("templates/*")
+	router.Static("/assets", "./assets")
 
 	routers.InitializeRouters(router)
 	routers.InitializeRateRouters(router)

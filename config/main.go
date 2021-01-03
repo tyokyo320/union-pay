@@ -1,6 +1,8 @@
 package config
 
 import (
+	"os"
+
 	"github.com/spf13/viper"
 )
 
@@ -9,7 +11,11 @@ func NewConfig(path string) *Config {
 	// 配置文件所在路径
 	viper.AddConfigPath(path)
 	// 配置文件名
-	viper.SetConfigName("config")
+	if os.Getenv("GIN_MODE") == "release" {
+		viper.SetConfigName("config")
+	} else {
+		viper.SetConfigName("devconfig")
+	}
 	// 配置文件名后缀
 	viper.SetConfigType("yml")
 

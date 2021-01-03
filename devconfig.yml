@@ -1,0 +1,15 @@
+# postgresql connect configuration
+postgresql:
+  host: "192.168.50.185"
+  port: "5432"
+  user: "test"
+  password: "test"
+  db: "test"
+  sslmode: "disable"
+  timezone: "Asia/Tokyo"
+
+# redis configuration
+redis:
+  addr: "192.168.50.185:6379"
+  password: ""
+  db: 0

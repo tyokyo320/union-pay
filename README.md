@@ -11,10 +11,10 @@
 9. 模版html的修改，jquery ajax
 10. 定时任务(jobrunner)
 11. 历史数据获取(先连接update DB，爬取并储存历史数据)
-12. 缓存
+12. 缓存(redis)
 13. log
 14. CI/CD
-15. docker-compose
+15. docker-compose(postgres, redis, golang app)
 16. 前端设计
 
 ## 文件构造
@@ -32,19 +32,9 @@
 
 - - -
 
-
-## docker
-
-- postgresql
-- redis
-- my(golang)
-
-
 ```mermaid
 graph BT
     config --> database
     database --> repository
     repository --> handler
 ```
-
-rest api
