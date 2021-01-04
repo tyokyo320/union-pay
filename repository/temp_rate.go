@@ -3,9 +3,16 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"sync"
 	"union-pay/models"
 
 	"gorm.io/gorm"
+)
+
+// singleton
+var (
+	tempInstance *RateRepository
+	tempOnce     sync.Once
 )
 
 // 定义接口
@@ -26,7 +33,10 @@ type RateRepository struct {
 // NewRateRepository 依赖注入，repository依赖连接数据库db
 func NewRateRepository(db *gorm.DB) *RateRepository {
 	// 返回一个repository的实例
-	return &RateRepository{db}
+	tempOnce.Do(func() {
+		tempInstance = &RateRepository{db}
+	})
+	return tempInstance
 }
 
 // 实现接口方法

@@ -179,6 +179,10 @@
                 success: function (result) {
                     $("#lastestRate").html(Math.round(result.lastestRate * 1000000) / 10000);
                     $("#lastestDate").html(new Date().toISOString().slice(0, 10));
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
                 }
             });
 
@@ -204,6 +208,10 @@
                             </tr>`
                         );
                     });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
                 }
             });
         });

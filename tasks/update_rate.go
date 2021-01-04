@@ -36,7 +36,7 @@ func (e UpdateRate) Run() {
 		return
 	}
 
-	// update DB中先创建当天数据，并不断更新有变化的数据
+	// 检查update数据库中是否有数据，有更新则更新DB，没有插入
 	var newRepo *repository.UpdateRateRepository = repository.NewUpdateRateRepository(global.POSTGRESQL_DB)
 	if change := newRepo.Read(date); change != nil {
 		if change.ExchangeRate != rate {

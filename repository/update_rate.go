@@ -3,10 +3,17 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"sync"
 	"union-pay/global"
 	"union-pay/models"
 
 	"gorm.io/gorm"
+)
+
+// singleton
+var (
+	updateUnstance *UpdateRateRepository
+	updateOnce     sync.Once
 )
 
 // 定义接口
@@ -27,7 +34,10 @@ type UpdateRateRepository struct {
 // NewUpdateRateRepository 依赖注入，repository依赖连接数据库db
 func NewUpdateRateRepository(db *gorm.DB) *UpdateRateRepository {
 	// 返回一个repository的实例
-	return &UpdateRateRepository{db}
+	updateOnce.Do(func() {
+		updateUnstance = &UpdateRateRepository{db}
+	})
+	return updateUnstance
 }
 
 // 向UpdateRate数据库添加数据

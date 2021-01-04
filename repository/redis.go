@@ -3,8 +3,15 @@ package repository
 import (
 	"context"
 	"strconv"
+	"sync"
 
 	"github.com/go-redis/redis/v8"
+)
+
+// singleton
+var (
+	redisInstance *RateCacheRepository
+	redisOnce     sync.Once
 )
 
 // 定义redis接口
@@ -20,7 +27,10 @@ type RateCacheRepository struct {
 
 // 创建一个结构体实例
 func NewRateCacheRepository(rdb *redis.Client) *RateCacheRepository {
-	return &RateCacheRepository{rdb}
+	redisOnce.Do(func() {
+		redisInstance = &RateCacheRepository{rdb}
+	})
+	return redisInstance
 }
 
 // 在缓存中创建
