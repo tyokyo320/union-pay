@@ -88,9 +88,7 @@
                                     </p>
                                 </div>
                                 <div class="card-footer">
-                                    <div class="stats">
-                                        <i class="material-icons">access_time</i> updated 4 minutes ago
-                                    </div>
+                                    <div class="stats" id="update-time"> </div>
                                 </div>
                             </div>
                         </div>
@@ -195,7 +193,8 @@
                 dataType: "json",
                 contentType: 'application/json',
                 success: function (result) {
-                    init(result)
+                    // line charts
+                    init(result);
                     result.historyRate.forEach(e => {
                         $("#historyRateBody").append(
                             `<tr>
@@ -207,32 +206,40 @@
                         );
                     });
                     // increase icon
-                    var todayRate = result.historyRate[0].exchangeRate
-                    var yesterdayRate = result.historyRate[1].exchangeRate
+                    var todayRate = result.historyRate[0].exchangeRate;
+                    var yesterdayRate = result.historyRate[1].exchangeRate;
                     if (todayRate - yesterdayRate > 0) {
                         $("#change-rate").append(
                             `<i class="fa fa-long-arrow-up" style="color: red"></i>
                             <span style="color: red"> ${todayRate - yesterdayRate} </span>
                             <span style="color: grey"> increase in today rates.</span>`
-                        )
+                        );
                     }
                     else if (todayRate - yesterdayRate < 0) {
                         $("#change-rate").append(
                             `<i class="fa fa-long-arrow-down" style="color: green"></i>
                                 <span style="color: green"> ${yesterdayRate - todayRate} </span>
                                 <span style="color: grey"> decrease in today rates.</span>`
-                        )
+                        );
 
                     } else {
                         $("#change-rate").append(
                             `<i class="fa fa-long-arrow-up" style="color: #708090"></i>
                                     <span style="color: #708090"> ${todayRate - yesterdayRate} </span>
                                     <span style="color: grey"> increase in today rates.</span>`
-                        )
+                        );
                     }
-                    console.log(result.historyRate);
-                    console.log(new Date().toISOString());
+                    // update time
+                    var nowTime = new Date();
+                    // 转秒
+                    const diff = (nowTime - Date.parse(result.historyRate[0].CreatedAt)) / 1000;
 
+                    const hours = Math.floor(diff / 3600);
+                    const minutes = Math.floor((diff - hours * 3600) / 60);
+                    $("#update-time").append(
+                        `<i class="material-icons">access_time</i>
+                        <span> updated ${hours} hours ${minutes} minutes ago </span>`
+                    );
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.status);
