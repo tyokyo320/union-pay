@@ -218,7 +218,7 @@
                     else if (todayRate - yesterdayRate < 0) {
                         $("#change-rate").append(
                             `<i class="fa fa-long-arrow-down" style="color: green"></i>
-                                <span style="color: green"> ${Math.round((yesterdayRate - todayRate) * 1000000 / 10000)} </span>
+                                <span style="color: green"> ${Math.round((yesterdayRate - todayRate) * 1000000) / 10000} </span>
                                 <span style="color: grey"> decrease in today rates.</span>`
                         );
 
