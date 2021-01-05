@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"union-pay/global"
@@ -36,22 +37,33 @@ func GetRate(c *gin.Context) {
 	var redisRepo *repository.RateCacheRepository = repository.NewRateCacheRepository(global.REDIS)
 
 	// 先从缓存中读取某一天汇率
-	rate, err := redisRepo.Read(form.Date)
+	rateJSON, err := redisRepo.Read(form.Date)
 	if err != nil {
 		// 如果缓存中没有，从Update DB中更新
-		rateStruct := newRepo.Read(form.Date)
-		// 然后添加至缓存中
-		redisRepo.Create(form.Date, rateStruct.ExchangeRate)
+		rateStruct := newRepo.ReadLastest()
+		j, err := json.Marshal(map[string]interface{}{
+			"rate": rateStruct.ExchangeRate,
+			"date": rateStruct.EffectiveDate,
+		})
+		if err != nil {
+			c.JSON(
+				http.StatusInternalServerError,
+				gin.H{
+					"error": "InternalServerError",
+				},
+			)
+			global.ErrorLogger.Println("[handler]Json marshal went wrong")
+			return
+		}
 
-		rate = rateStruct.ExchangeRate
+		rateJSON = string(j)
+		// 然后添加至缓存中
+		redisRepo.Create(form.Date, string(j))
 	}
 
-	c.JSON(
-		http.StatusOK,
-		gin.H{
-			"rate": rate,
-		},
-	)
+	c.Writer.Header().Set("Content-Type", "application/json")
+	c.Writer.WriteHeader(http.StatusOK)
+	c.Writer.WriteString(rateJSON)
 }
 
 // GetLatestRate 获取最近一天的汇率
@@ -59,19 +71,31 @@ func GetLatestRate(c *gin.Context) {
 	var newRepo *repository.UpdateRateRepository = repository.NewUpdateRateRepository(global.POSTGRESQL_DB)
 	var redisRepo *repository.RateCacheRepository = repository.NewRateCacheRepository(global.REDIS)
 
-	rate, err := redisRepo.Read("latest")
+	rateJSON, err := redisRepo.Read("latest")
 	if err != nil {
-		lastestRate := newRepo.ReadLastest()
-		redisRepo.Create("latest", lastestRate.ExchangeRate)
-		rate = lastestRate.ExchangeRate
+		rateStruct := newRepo.ReadLastest()
+		j, err := json.Marshal(map[string]interface{}{
+			"rate": rateStruct.ExchangeRate,
+			"date": rateStruct.EffectiveDate,
+		})
+		if err != nil {
+			c.JSON(
+				http.StatusInternalServerError,
+				gin.H{
+					"error": "InternalServerError",
+				},
+			)
+			return
+		}
+
+		rateJSON = string(j)
+		redisRepo.Create("latest", string(j))
+
 	}
 
-	c.JSON(
-		http.StatusOK,
-		gin.H{
-			"lastestRate": rate,
-		},
-	)
+	c.Writer.Header().Set("Content-Type", "application/json")
+	c.Writer.WriteHeader(http.StatusOK)
+	c.Writer.WriteString(rateJSON)
 }
 
 // GetHistoryRate 获取最近n天的历史汇率

@@ -2,6 +2,7 @@
 package tasks
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 	"union-pay/global"
@@ -50,13 +51,25 @@ func (e AddRate) Run() {
 	if change := newRepo.Read(date); change != nil {
 		if change.ExchangeRate != rate {
 			newRepo.Update(date, rate)
+		} else {
+			return
 		}
 	} else {
 		newRepo.Create(date, rate)
 	}
+
+	j, err := json.Marshal(map[string]interface{}{
+		"rate": rate,
+		"date": rate,
+	})
+	if err != nil {
+		global.ErrorLogger.Println("[tasks add]Json marshal went wrong")
+		return
+	}
+
 	// 并添加至缓存中
 	var redisRepo *repository.RateCacheRepository = repository.NewRateCacheRepository(global.REDIS)
-	redisRepo.Create("latest", rate)
+	redisRepo.Create("latest", string(j))
 
 	// Sends some email
 	// fmt.Printf("Every 10 sec send reminder emails \n")

@@ -2,11 +2,10 @@
 package tasks
 
 import (
-	"fmt"
+	"encoding/json"
 	"time"
 	"union-pay/global"
 	"union-pay/repository"
-	"union-pay/utils"
 )
 
 // Job Specific Functions
@@ -14,45 +13,44 @@ type UpdateRate struct {
 	// filtered
 }
 
-// 每天执行一次，如果当天没获取到，复制前一天有数据的汇率
+// 每天执行一次，如果当天没获取到，复制前一天有数据的汇率，
+// 防止当天没有数据导致当天数据为空
 func (e UpdateRate) Run() {
 	// get lastest rate
 	// date := "2020-12-28"
 	currentTime := time.Now()
 	date := currentTime.Format("2006-01-02")
-	rate, err := utils.GetRate(date, "CNY", "JPY")
 
-	if err != nil {
-		global.ErrorLogger.Println("[tasks update]Get rate went wrong")
-		fmt.Println(err.Error())
-		return
-	}
-
-	fmt.Println(rate)
-
-	if rate == 0 {
-		global.InfoLogger.Println("[tasks update]当日汇率查询显示待更新")
-		fmt.Println("当日汇率查询显示待更新")
-		return
-	}
-
-	// 检查update数据库中是否有数据，有更新则更新DB，没有插入
+	// 检查update数据库中是否有当天数据
 	var newRepo *repository.UpdateRateRepository = repository.NewUpdateRateRepository(global.POSTGRESQL_DB)
-	if change := newRepo.Read(date); change != nil {
-		if change.ExchangeRate != rate {
-			newRepo.Update(date, rate)
-		}
-	} else {
-		newRepo.Create(date, rate)
+	if rate := newRepo.Read(date); rate != nil {
+		return
 	}
-	// if isex, _ := newRepo.IsExist(date); isex {
-	// 	newRepo.Update(date, rate)
-	// } else {
-	// 	newRepo.Create(date, rate)
-	// }
+
+	yesterdayTime := currentTime.AddDate(0, 0, -1)
+	yesterday := yesterdayTime.Format("2006-01-02")
+
+	rate := newRepo.Read(yesterday)
+	if rate != nil {
+		// 若当天无数据，则复制昨天数据为当天汇率
+		newRepo.Create(date, rate.ExchangeRate)
+	} else {
+		// 若昨天数据为空，则panic
+		global.PanicLogger.Println("[tasks update]Copy yesterday rate to update_rate DB went wrong")
+		panic("No rate yesterday")
+	}
+
+	// 将数据编码成json字符串
+	j, err := json.Marshal(map[string]interface{}{
+		"rate": rate.ExchangeRate,
+		"date": rate.EffectiveDate,
+	})
+	if err != nil {
+		global.ErrorLogger.Println("[tasks update]Json marshal went wrong")
+		return
+	}
 
 	// 并添加至缓存中
 	var redisRepo *repository.RateCacheRepository = repository.NewRateCacheRepository(global.REDIS)
-	redisRepo.Create("latest", rate)
-	fmt.Println("------")
+	redisRepo.Create("latest", string(j))
 }
