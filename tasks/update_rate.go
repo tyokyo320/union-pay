@@ -16,6 +16,7 @@ type UpdateRate struct {
 // 每天执行一次，如果当天没获取到，复制前一天有数据的汇率，
 // 防止当天没有数据导致当天数据为空
 func (e UpdateRate) Run() {
+	global.InfoLogger.Println("[tasks Update]Job runner started...")
 	// get lastest rate
 	// date := "2020-12-28"
 	currentTime := time.Now()
