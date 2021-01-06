@@ -44,7 +44,7 @@ func (e UpdateRate) Run() {
 	// 将数据编码成json字符串
 	j, err := json.Marshal(map[string]interface{}{
 		"rate": rate.ExchangeRate,
-		"date": rate.EffectiveDate,
+		"date": date,
 	})
 	if err != nil {
 		global.ErrorLogger.Println("[tasks update]Json marshal went wrong")

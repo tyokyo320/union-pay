@@ -61,7 +61,7 @@ func (e AddRate) Run() {
 
 	j, err := json.Marshal(map[string]interface{}{
 		"rate": rate,
-		"date": rate,
+		"date": date,
 	})
 	if err != nil {
 		global.ErrorLogger.Println("[tasks add]Json marshal went wrong")
