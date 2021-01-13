@@ -10,8 +10,8 @@ services:
       POSTGRES_DB: test
     ports:
       - 5432:5432
-    volumes:
-      - ~/docker/union-pay/postgresql/data:/var/lib/postgresql/data
+    # volumes:
+    #   - ~/docker/union-pay/postgresql/data:/var/lib/postgresql/data
     networks:
       - default
       - nginx-proxy
@@ -26,10 +26,10 @@ services:
     networks:
       - default
       - nginx-proxy
-    volumes:
-      - ~/docker/union-pay/redis/data:/data
-      - ~/docker/union-pay/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
-      - ~/docker/union-pay/redis/logs:/logs
+    # volumes:
+    #   - ~/docker/union-pay/redis/data:/data
+    #   - ~/docker/union-pay/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+    #   - ~/docker/union-pay/redis/logs:/logs
 
   rate:
     build: ~/docker/union-pay/
