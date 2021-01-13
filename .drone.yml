@@ -17,6 +17,10 @@ steps:
       - docker-compose down -v
       - cd ..
       - rm -rf union-pay
+      - git clone https://github.com/tyokyo320/union-pay.git docker/union-pay
+      - cd union-pay
+      - docker-compose up -d --build
+
 
 
 trigger:
