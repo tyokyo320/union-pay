@@ -13,13 +13,10 @@ steps:
       from_secret: id_rsa
     port: 22
     script:
-      - cd docker/union-pay
-      - docker-compose down -v
-      - cd ..
-      - rm -rf union-pay
-      - git clone https://github.com/tyokyo320/union-pay.git ./union-pay
-      - cd union-pay
-      - docker-compose up -d --build
+      - docker-compose -f docker/union-pay/docker-compose.yml down -v
+      - rm -rf docker/union-pay
+      - git clone https://github.com/tyokyo320/union-pay.git docker/union-pay
+      - docker-compose -f docker/union-pay/docker-compose.yml -d --build
 
 
 
