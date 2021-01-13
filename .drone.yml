@@ -6,17 +6,17 @@ name: union-pay
 steps:
 - name: ssh commands
   image: appleboy/drone-ssh
-    settings:
-      host: 172.17.0.1
-      username: zhangqiang
-      key:
-        from_secret: id_rsa
-      port: 22
-      script:
-        - cd docker
-        - rm -rf union-pay/postgres
-        - rm -rf union-pay/redis
-        - rm -rf union-pay
+  settings:
+    host: 172.17.0.1
+    username: zhangqiang
+    key:
+      from_secret: id_rsa
+    port: 22
+    script:
+      - cd docker
+      - rm -rf union-pay/postgres
+      - rm -rf union-pay/redis
+      - rm -rf union-pay
 
 trigger:
   event:
