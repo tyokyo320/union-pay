@@ -10,8 +10,8 @@ steps:
       # docker host or public ip
       host: 172.17.0.1
       username: zhangqiang
-+     key:
-+       from_secret: id_rsa
+      key:
+        from_secret: id_rsa
       port: 22
       script:
         - cd docker
