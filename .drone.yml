@@ -16,9 +16,7 @@ steps:
       - docker-compose -f docker/union-pay/docker-compose.yml down -v
       - rm -rf docker/union-pay
       - git clone https://github.com/tyokyo320/union-pay.git docker/union-pay
-      - docker-compose -f docker/union-pay/docker-compose.yml -d --build
-
-
+      - docker-compose -f docker/union-pay/docker-compose.yml up -d --build
 
 trigger:
   event:
