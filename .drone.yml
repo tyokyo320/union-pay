@@ -14,9 +14,9 @@ steps:
     port: 22
     script:
       - cd docker
-      - rm -rf union-pay/postgres
-      - rm -rf union-pay/redis
-      - rm -rf union-pay
+      - sudo rm -rf union-pay/postgres
+      - sudo rm -rf union-pay/redis
+      - sudo rm -rf union-pay
 
 trigger:
   event:
