@@ -13,9 +13,8 @@ steps:
       from_secret: id_rsa
     port: 22
     script:
+      - docker -rm -v postgres redis rate
       - cd docker
-      - rm -rf union-pay/postgres
-      - rm -rf union-pay/redis
       - rm -rf union-pay
 
 trigger:
