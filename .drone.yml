@@ -29,9 +29,9 @@ steps:
     script:
       - | 
         if [ -d "docker/union-pay" ]; then
-          git clone https://github.com/tyokyo320/union-pay.git docker/union-pay
-        else
           git --git-dir=docker/union-pay pull
+        else
+          git clone https://github.com/tyokyo320/union-pay.git docker/union-pay
         fi
       - docker-compose -f docker/union-pay/docker-compose.yml up -d --build
 
