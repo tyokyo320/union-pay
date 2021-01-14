@@ -16,7 +16,7 @@ func RunTasks() {
 	jobrunner.Start()
 	jobrunner.Schedule("TZ=Asia/Tokyo */1 * * * *", boloRate{})
 	// At minute o past every hour
-	jobrunner.Schedule("TZ=Asia/Tokyo 0 */1 * * *", AddRate{})
+	jobrunner.Schedule("TZ=Asia/Tokyo 0 * * * *", AddRate{})
 	// At 23:00
 	jobrunner.Schedule("TZ=Asia/Tokyo 0 23 * * *", UpdateRate{})
 
