@@ -28,7 +28,7 @@ steps:
     port: 22
     script:
       - | 
-        if [ -d "$DIR" ]; then
+        if [ -d "docker/union-pay" ]; then
           git clone https://github.com/tyokyo320/union-pay.git docker/union-pay
         else
           git --git-dir=docker/union-pay pull
