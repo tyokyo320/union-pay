@@ -18,6 +18,7 @@ type AddRate struct {
 // ReminderEmails.Run() will get triggered automatically.
 func (e AddRate) Run() {
 	global.InfoLogger.Println("[tasks add]Job runner started...")
+
 	// get lastest rate
 	currentTime := time.Now()
 	date := currentTime.Format("2006-01-02")
