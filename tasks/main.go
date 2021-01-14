@@ -14,11 +14,23 @@ import (
 func RunTasks() {
 	// optional: jobrunner.Start(pool int, concurrent int) (10, 1)
 	jobrunner.Start()
-	jobrunner.Schedule("TZ=Asia/Tokyo */1 * * * *", boloRate{})
+
+	err := jobrunner.Schedule("TZ=Asia/Tokyo */1 * * * *", boloRate{})
+	if err != nil {
+		panic(err)
+	}
+
 	// At minute o past every hour
-	jobrunner.Schedule("TZ=Asia/Tokyo 0 * * * *", AddRate{})
+	err = jobrunner.Schedule("TZ=Asia/Tokyo 0 * * * *", AddRate{})
+	if err != nil {
+		panic(err)
+	}
+
 	// At 23:00
-	jobrunner.Schedule("TZ=Asia/Tokyo 0 23 * * *", UpdateRate{})
+	err = jobrunner.Schedule("TZ=Asia/Tokyo 0 23 * * *", UpdateRate{})
+	if err != nil {
+		panic(err)
+	}
 
 	tasks := jobrunner.Entries()
 	for _, v := range tasks {
