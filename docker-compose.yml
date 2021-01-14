@@ -32,7 +32,7 @@ services:
     #   - ~/docker/union-pay/redis/logs:/logs
 
   rate:
-    build: ~/docker/union-pay/
+    image: union-pay:latest
     container_name: rate
     environment:
       - TZ=Asia/Tokyo
