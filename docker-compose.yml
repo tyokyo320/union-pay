@@ -34,7 +34,6 @@ services:
   rate:
     build: ~/docker/union-pay/
     container_name: rate
-    user: 1000
     environment:
       - TZ=Asia/Tokyo
       - VIRTUAL_HOST=rate.tyokyo320.com
