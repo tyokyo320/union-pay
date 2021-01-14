@@ -4,6 +4,20 @@ type: docker
 name: union-pay
 
 steps:
+- name: send-telegram-notification-start
+  image: appleboy/drone-telegram
+  settings:
+    token:
+      from_secret: telegram_api_key
+    to:
+      from_secret: telegram_owner
+    format: markdown
+    message: |
+      🚀 *Build started*: [${DRONE_REPO}](${DRONE_REPO_LINK}) - Build #{{build.number}} (type: `{{ build.event }}`)
+      📝 *Commit*: {{ truncate commit.sha 8 }}
+      🔀 *Branch*: {{ commit.branch }}
+      🌐 *Goto*: [Build Page]({{ build.link }})
+
 - name: ssh commands
   image: appleboy/drone-ssh
   settings:
@@ -17,6 +31,25 @@ steps:
       - rm -rf docker/union-pay
       - git clone https://github.com/tyokyo320/union-pay.git docker/union-pay
       - docker-compose -f docker/union-pay/docker-compose.yml up -d --build
+
+- name: send-telegram-notification-end
+  image: appleboy/drone-telegram
+  settings:
+    token:
+      from_secret: telegram_api_key
+    to:
+      from_secret: telegram_owner
+    format: markdown
+    message: |
+      {{#success build.status}}
+        ✅ *{{ uppercasefirst build.status }}*: [${DRONE_REPO}](${DRONE_REPO_LINK}) - Build #{{build.number}} (type: `{{ build.event }}`)
+      {{else}}
+        ❌ *{{ uppercasefirst build.status }}*: [${DRONE_REPO}](${DRONE_REPO_LINK}) - Build #{{build.number}} (type: `{{ build.event }}`)
+      {{/success}}
+      📝 *Commit*: {{ truncate commit.sha 8 }}
+      🔀 *Branch*: {{ commit.branch }}
+      🌐 *Goto*: [Build Page]({{ build.link }})
+      🕒 *Duration*: {{ since build.started }}
 
 trigger:
   event:
