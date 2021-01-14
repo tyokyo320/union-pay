@@ -20,10 +20,10 @@ func RunTasks() {
 	// At 23:00
 	jobrunner.Schedule("TZ=Asia/Tokyo 0 23 * * *", UpdateRate{})
 
-	// tasks := jobrunner.Entries()
-	// for _, v := range tasks {
-	// 	fmt.Println(v.Job)
-	// }
+	tasks := jobrunner.Entries()
+	for _, v := range tasks {
+		fmt.Println(v.Job)
+	}
 }
 
 type boloRate struct {
