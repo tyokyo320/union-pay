@@ -21,8 +21,7 @@ steps:
 - name: build test image
   image: docker:latest
   volumes:
-    - name: docker_sock
-      path: /var/run/docker.sock
+    - /var/run/docker.sock:/var/run/docker.sock
   commands:
     - docker build --no-cache -t union-pay:latest -f Dockerfile .
 
