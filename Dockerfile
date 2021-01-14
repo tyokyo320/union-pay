@@ -20,6 +20,9 @@ COPY --from=builder /union-pay/templates templates
 COPY --from=builder /union-pay/assets assets
 COPY --from=builder /union-pay/app .
 EXPOSE 8080
+
+RUN groupadd -r union_pay && useradd --no-log-init -r -g union_pay union_pay
+USER union_pay
 CMD ["./app"]  
 
 
