@@ -22,7 +22,7 @@ func init() {
 
 func main() {
 	// set start of days
-	start := time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)
+	start := time.Date(2022, 12, 14, 0, 0, 0, 0, time.UTC)
 	end := time.Now()
 	fmt.Println(start.Format("2006-01-02"), "-", end.Format("2006-01-02"))
 
@@ -36,7 +36,7 @@ func main() {
 		}
 
 		// fmt.Println(date.Format("2006-01-02"))
-		rate, err := utils.GetRate(date.Format("2006-01-02"), "CNY", "JPY")
+		rate, err := utils.GetRate(date.Format("20060102"))
 		if err != nil {
 			fmt.Println("[crawler]get history rate error!")
 			global.ErrorLogger.Println("Get history rate went wrong")
