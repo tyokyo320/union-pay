@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"union-pay/global"
 )
 
@@ -23,7 +24,13 @@ type ExchangeRate struct {
 
 // 银联官网爬取所选日期，货币种类的汇率
 func GetRate(date string) (float64, error) {
-	urls := fmt.Sprintf("https://m.unionpayintl.com/jfimg/%s.json", date)
+	var d string
+	if strings.Contains(date, "-") {
+		d = strings.Replace(date, "-", "", -1)
+	} else {
+		d = date
+	}
+	urls := fmt.Sprintf("https://m.unionpayintl.com/jfimg/%s.json", d)
 	fmt.Println(urls)
 
 	client := &http.Client{}

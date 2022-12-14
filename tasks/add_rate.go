@@ -23,7 +23,7 @@ func (e AddRate) Run() {
 	currentTime := time.Now()
 	date := currentTime.Format("2006-01-02")
 	time := currentTime.Format("15:04:05")
-	rate, err := utils.GetRate(date, "CNY", "JPY")
+	rate, err := utils.GetRate(date)
 
 	if err != nil {
 		global.ErrorLogger.Println("[tasks add]Get rate went wrong...")
