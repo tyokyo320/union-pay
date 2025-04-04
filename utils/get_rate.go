@@ -69,9 +69,20 @@ func GetRate(date string) (float64, error) {
 	// fmt.Println(string(body))
 
 	res := Result{}
-	json.Unmarshal(body, &res)
+	err = json.Unmarshal(body, &res)
+	if err != nil {
+		global.ErrorLogger.Println("[utils]Json unmarshal went wrong")
+		fmt.Println("json unmarshal error", err)
+		return 0.0, errors.New("json unmarshal error")
+	}
+
+	for _, rate := range res.ExchangeRate {
+		if rate.TransactionCurrency == "JPY" && rate.BaseCurrency == "CNY" {
+			return rate.ExchangeRate, nil
+		}
+	}
 	// fmt.Println(res.CurDate)
 	// fmt.Println(res.ExchangeRate)
-
-	return res.ExchangeRate[387].ExchangeRate, nil
+	fmt.Println("JPY to CNY rate not found!")
+	return 0.0, errors.New("JPY to CNY rate not found")
 }
