@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"union-pay/global"
@@ -60,7 +60,7 @@ func GetRate(date string) (float64, error) {
 	// 函数结束后关闭相关链接
 	defer response.Body.Close()
 
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		global.ErrorLogger.Println("[utils]Http read body went wrong")
 		fmt.Println("read error", err)
@@ -73,5 +73,5 @@ func GetRate(date string) (float64, error) {
 	// fmt.Println(res.CurDate)
 	// fmt.Println(res.ExchangeRate)
 
-	return res.ExchangeRate[388].ExchangeRate, nil
+	return res.ExchangeRate[387].ExchangeRate, nil
 }
